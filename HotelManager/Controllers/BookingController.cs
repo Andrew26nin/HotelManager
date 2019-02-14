@@ -21,6 +21,11 @@ namespace HotelManager.Controllers
             _context = context;
         }
 
+
+
+
+
+
         // GET: Bookings
         public async Task<IActionResult> Index(int? id)
         {
@@ -33,7 +38,7 @@ namespace HotelManager.Controllers
             DateTime maxBookingDate = bookingEndDates.Any() ? bookingEndDates.Max() : DateTime.MaxValue;
 
 
-            List<DateTime> fullyOccupiedDates = new List<DateTime>();
+           // List<DateTime> fullyOccupiedDates = new List<DateTime>();
 
             //int noOfRooms = _context.Room.Count();
 
@@ -65,6 +70,14 @@ namespace HotelManager.Controllers
             return View(await bookings.ToListAsync());
         }
 
+
+        
+
+
+
+
+
+
         // GET: Bookings/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -85,14 +98,22 @@ namespace HotelManager.Controllers
             return View(booking);
         }
 
+
+
+
+
         // GET: Bookings/Create
         public IActionResult Create()
         {
-            ViewData["ClientId"] = new SelectList(_context.Set<Client>(), "Id", "Id");
-            ViewData["RoomId"] = new SelectList(_context.Set<Room>(), "Id", "Id");
-            ViewData["ClientName"] = new SelectList(_context.Set<Client>(), "Name", "Name");
+            //ViewData["ClientId"] = new SelectList(_context.Set<Client>(), "Id", "Id");
+            //ViewData["RoomId"] = new SelectList(_context.Set<Room>(), "Id", "Id");
+           // ViewData["RoomType"] = new SelectList(_context.Set<Room>(), "Id", "Type");
+            ViewData["ClientName"] = new SelectList(_context.Set<Client>(), "Id", "Name");
             return View();
         }
+
+
+
 
         // POST: Bookings/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -102,15 +123,15 @@ namespace HotelManager.Controllers
         public async Task<IActionResult> Create([Bind("StartDate,EndDate,ClientId")] Booking booking)
         {
             if (ModelState.IsValid)
-            {
+            { 
                 int roomId = -1;
-                DateTime startDate = booking.StartDate;
-                DateTime endDate = booking.EndDate;
+                DateTime startDate = booking.StartDate.AddHours(12);
+                DateTime endDate = booking.EndDate.AddHours(12);
 
                 if (startDate <= DateTime.Today || startDate > endDate)
                 {
-                    ViewData["ClientId"] = new SelectList(_context.Set<Client>(), "Id", "Id", booking.ClientId);
-                    ViewBag.Status = "The start date cannot be in the past or later than the end date.";
+                    ViewData["ClientName"] = new SelectList(_context.Set<Client>(), "Id", "Name", booking.ClientId);
+                    ViewBag.Status = "Дата заезда не может быть до сегодня или позже даты выезда.";
                     return View(booking);
                 }
 
@@ -136,10 +157,13 @@ namespace HotelManager.Controllers
                 }
             }
 
-            ViewData["ClientId"] = new SelectList(_context.Set<Client>(), "Id", "Id", booking.ClientId);
-            ViewBag.Status = "The booking could not be created. There were no available room.";
+            ViewData["ClientName"] = new SelectList(_context.Set<Client>(), "Id", "Name", booking.ClientId);
+            ViewBag.Status = "Создание записи невозможна. Нет свободных номеров.";
             return View(booking);
         }
+
+
+
 
         // GET: Bookings/Edit/5
         public async Task<IActionResult> Edit(int? id)
@@ -154,7 +178,8 @@ namespace HotelManager.Controllers
             {
                 return NotFound();
             }
-            ViewData["ClientId"] = new SelectList(_context.Set<Client>(), "Id", "Id", booking.ClientId);
+          
+            ViewData["ClientName"] = new SelectList(_context.Set<Client>(), "Id", "Name", booking.ClientId);
             ViewData["RoomId"] = new SelectList(_context.Set<Room>(), "Id", "Id", booking.RoomId);
             return View(booking);
         }
@@ -164,7 +189,7 @@ namespace HotelManager.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StartDate,EndDate,IsActive,ClientId,RoomId")] Booking booking)
+        public async Task<IActionResult> Edit(int id, [Bind("StartDate,EndDate,IsActive,ClientId,RoomId,Id")] Booking booking)
         {
             if (id != booking.Id)
             {
@@ -191,10 +216,11 @@ namespace HotelManager.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["ClientId"] = new SelectList(_context.Set<Client>(), "Id", "Id", booking.ClientId);
+            ViewData["ClientName"] = new SelectList(_context.Set<Client>(), "Id", "Name", booking.ClientId);
             ViewData["RoomId"] = new SelectList(_context.Set<Room>(), "Id", "Id", booking.RoomId);
             return View(booking);
         }
+
 
         // GET: Bookings/Delete/5
         public async Task<IActionResult> Delete(int? id)
@@ -212,9 +238,11 @@ namespace HotelManager.Controllers
             {
                 return NotFound();
             }
-
+            int cash = (booking.EndDate.Day - booking.StartDate.Day) * booking.Room.Cost;
+            ViewBag.Cash = cash.ToString();
             return View(booking);
         }
+
 
         // POST: Bookings/Delete/5
         [HttpPost, ActionName("Delete")]
@@ -226,6 +254,9 @@ namespace HotelManager.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+
+
+
 
         private bool BookingExists(int id)
         {

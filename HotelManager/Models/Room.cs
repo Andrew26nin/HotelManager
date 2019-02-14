@@ -12,6 +12,8 @@ namespace HotelManager.Models
 
         public int Cost { get; set; }
         public string Type { get; set; }
+
+
         public int RoomTypeID { get; set; }
 
         public virtual RoomType RoomType { get; set; }
