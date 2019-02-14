@@ -29,7 +29,7 @@ namespace HotelManager.Data.Migrations
 
                     b.Property<int?>("ClientId");
 
-                    b.Property<int>("CustomerId");
+                    b.Property<int>("ClientId");
 
                     b.Property<DateTime>("EndDate");
 

@@ -35,32 +35,32 @@ namespace HotelManager.Controllers
 
             List<DateTime> fullyOccupiedDates = new List<DateTime>();
 
-            int noOfRooms = _context.Room.Count();
+            //int noOfRooms = _context.Room.Count();
 
-            if (_context.Booking.Any())
-            {
-                for (DateTime d = minBookingDate; d <= maxBookingDate; d = d.AddDays(1))
-                {
-                    var noOfBookings = from b in _context.Booking
-                                       where b.IsActive && d >= b.StartDate && d <= b.EndDate
-                                       select b;
-                    if (noOfBookings.Count() >= noOfRooms)
-                        fullyOccupiedDates.Add(d);
-                }
-            }
+            //if (_context.Booking.Any())
+            //{
+            //    for (DateTime d = minBookingDate; d <= maxBookingDate; d = d.AddDays(1))
+            //    {
+            //        var noOfBookings = from b in _context.Booking
+            //                           where b.IsActive && d >= b.StartDate && d <= b.EndDate
+            //                           select b;
+            //        if (noOfBookings.Count() >= noOfRooms)
+            //            fullyOccupiedDates.Add(d);
+            //    }
+            //}
 
-            ViewBag.FullyOccupiedDates = fullyOccupiedDates;
+            //ViewBag.FullyOccupiedDates = fullyOccupiedDates;
 
-            int minBookingYear = minBookingDate.Year;
-            int maxBookingYear = maxBookingDate.Year;
-            if (id == null)
-                id = DateTime.Today.Year;
-            else if (id < minBookingYear)
-                id = minBookingYear;
-            else if (id > maxBookingYear)
-                id = maxBookingYear;
+            //int minBookingYear = minBookingDate.Year;
+            //int maxBookingYear = maxBookingDate.Year;
+            //if (id == null)
+            //    id = DateTime.Today.Year;
+            //else if (id < minBookingYear)
+            //    id = minBookingYear;
+            //else if (id > maxBookingYear)
+            //    id = maxBookingYear;
 
-            ViewBag.YearToDisplay = id;
+            //ViewBag.YearToDisplay = id;
 
             return View(await bookings.ToListAsync());
         }
@@ -89,6 +89,8 @@ namespace HotelManager.Controllers
         public IActionResult Create()
         {
             ViewData["ClientId"] = new SelectList(_context.Set<Client>(), "Id", "Id");
+            ViewData["RoomId"] = new SelectList(_context.Set<Room>(), "Id", "Id");
+            ViewData["ClientName"] = new SelectList(_context.Set<Client>(), "Name", "Name");
             return View();
         }
 

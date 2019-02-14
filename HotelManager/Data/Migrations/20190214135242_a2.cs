@@ -11,7 +11,7 @@ namespace HotelManager.Data.Migrations
                 table: "Booking");
 
             migrationBuilder.DropColumn(
-                name: "CustomerId",
+                name: "ClientId",
                 table: "Booking");
 
             migrationBuilder.AlterColumn<int>(
@@ -43,7 +43,7 @@ namespace HotelManager.Data.Migrations
                 oldClrType: typeof(int));
 
             migrationBuilder.AddColumn<int>(
-                name: "CustomerId",
+                name: "ClientId",
                 table: "Booking",
                 nullable: false,
                 defaultValue: 0);

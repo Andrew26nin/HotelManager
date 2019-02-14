@@ -10,7 +10,9 @@ namespace HotelManager.Models
         public int Id { get; set; }
         public string Capacity { get; set; }
 
-        public int RoomTypeId { get; set; }
+        public int Cost { get; set; }
+        public string Type { get; set; }
+        public int RoomTypeID { get; set; }
 
         public virtual RoomType RoomType { get; set; }
         public virtual List<Booking> Booking { get; set; }

@@ -65,9 +65,9 @@ namespace HotelManager.Data.Migrations
                     StartDate = table.Column<DateTime>(nullable: false),
                     EndDate = table.Column<DateTime>(nullable: false),
                     IsActive = table.Column<bool>(nullable: false),
-                    CustomerId = table.Column<int>(nullable: false),
+                    ClientId = table.Column<int>(nullable: false),
                     RoomId = table.Column<int>(nullable: false),
-                    ClientId = table.Column<int>(nullable: true)
+                    CurrentId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
